@@ -52,6 +52,17 @@ body::before {
   will-change: filter;
   transition: filter 0.3s;
 }
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
+.buttons button[data-value="backspace"]{
+  grid-column: span 2;
+}
+
+.buttons button[data-value="0"]{
+  grid-column: span 2;
+}
 
 @keyframes spin {
   from {
