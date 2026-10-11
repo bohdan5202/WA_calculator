@@ -4,6 +4,8 @@ import { Delete } from "lucide-react";
 import ReactConfetti from "react-confetti";
 import { nextStr } from "./calculate";
 
+
+
 const buttons_items:string[] = ["AC","backspace","/",
                                  "7","8","9","*",
                                  "4","5","6","-",
@@ -15,7 +17,6 @@ const buttons_items:string[] = ["AC","backspace","/",
 export function App() {
   const [value, setValue] = useState<string>("");
   const [confetti, setConfetti] = useState<boolean>(false);
-  
   useEffect( () => {
       function onKey(e: KeyboardEvent){
         if(e.key === "Enter"){ e.preventDefault();  handleClick("=");}
@@ -28,8 +29,9 @@ export function App() {
     }, [value]);
 
   function handleClick(lable: string){
-    setValue(nextStr(value, lable))
-    if (lable === "=" && value !== "Error") setConfetti(true);
+    const print = nextStr(value, lable)
+    setValue(print)
+    if (lable === "=" && print !== "Error" && print !== value) setConfetti(true);
   }
 
   return (

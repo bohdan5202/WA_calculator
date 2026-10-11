@@ -1,13 +1,14 @@
 const digits:string[] = ["0","1","2","3","4","5","6","7","8","9"]
 const opp:string[] = ["/","*","+","-"]
-let result:string = ""
 
 
 export function nextStr(curr: string, next:string) : string{
+    let result:string = ""
     if (curr === "Error") curr = "";
 // numbers
     if (digits.includes(next)){ 
-        if (curr === "0") result = next; else result = curr + next;
+        if (IsLastNumbZero(curr)) result = curr.slice(0,-1) + next;
+        else result = curr + next;
     }
     
 // op    
@@ -51,6 +52,11 @@ function theLastHasDot(all:string):boolean{
     return splited.includes(".")  
 }
 
+function IsLastNumbZero(all:string):boolean{
+    let splited:string = all.split(/[+\-*/]/).at(-1)?? "";
+    return splited === "0";
+}
+
 function equalManual(all:string):string{
     if (all.startsWith("-")) all = "0" + all;
     let buffer:string[] = all.split(/([+\-*/])/);
@@ -69,8 +75,8 @@ function equalManual(all:string):string{
     for (let i = 0; i < ops.length; i++){
         total = operate(total, ops[i] ?? "", nump [i+1] ?? 0);
     }
-    if (!Number.isFinite(total)) return "Error"
-    total = Math.round(total * 100) / 100
+    if (!Number.isFinite(total)) return "Error";
+    total = parseFloat(total.toPrecision(12));
     return String(total);
 }
 
