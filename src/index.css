@@ -55,6 +55,7 @@ body::before {
 .buttons {
   display: grid;
   grid-template-columns: repeat(4,1fr);
+  gap: 0.5rem;
 }
 .buttons button[data-value="backspace"]{
   grid-column: span 2;
@@ -62,6 +63,10 @@ body::before {
 
 .buttons button[data-value="0"]{
   grid-column: span 2;
+}
+
+.buttons button:is([data-value="/"],button[data-value="+"],button[data-value="*"],button[data-value="-"]){
+  background: orange;
 }
 
 @keyframes spin {
@@ -96,16 +101,23 @@ code {
   background: #fbf0df;
   color: #1a1a1a;
   border: 0;
-  padding: 0.4rem 1.2rem;
+  height: 60px;
+  font-size: 1.3rem;
+  user-select: none;
   border-radius: 8px;
   font-weight: 700;
   transition: 0.1s;
-  cursor: var(--bun-cursor);
 }
 .buttons button:hover {
   background: #f3d5a3;
   transform: translateY(-1px);
   cursor: pointer;
+}
+button:active{
+  transform: scale(0.95);
+}
+button:focus-visible{
+  outline: invert;
 }
 .response-area {
   width: 100%;
@@ -131,4 +143,27 @@ code {
   ::after {
     animation: none !important;
   }
+}
+
+.calc {
+  width: 320px;
+  background: #4d4d4d;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.display{
+  text-align: right;
+  font-size: 2rem;
+  min-height: 3rem;
+  padding: 1rem;
+  background: #111111;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
