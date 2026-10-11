@@ -3,6 +3,7 @@ import "./index.css";
 
 import logo from "./logo.svg";
 import reactLogo from "./react.svg";
+import { nextStr } from "./calculate";
 
 const buttons_items:string[] = ["AC","backspace","/",
                                  "7","8","9","*",
@@ -13,12 +14,10 @@ const buttons_items:string[] = ["AC","backspace","/",
 
 
 export function App() {
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string>("");
 
   function handleClick(lable: string){
-    // if(parseInt(lable) === Number){
-    //   setValue = lable
-    // }
+    setValue(nextStr(value, lable))
   }
   return (
     <div className="app">
