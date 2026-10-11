@@ -1,6 +1,10 @@
 const digits:string[] = ["0","1","2","3","4","5","6","7","8","9"]
-const opp:string[] = ["/","*","+","-"]
+const operators = ["+","-","*","/"] as const;
+type Operation = (typeof operators)[number];
 
+function isOperation(value: string): value is Operation{
+    return (operators as readonly string[]).includes(value);
+}
 
 export function nextStr(curr: string, next:string) : string{
     let result:string = ""
@@ -12,9 +16,9 @@ export function nextStr(curr: string, next:string) : string{
     }
     
 // op    
-    else if (opp.includes(next)){
+    else if (isOperation(next)){
         if (curr === "") return "0" + next;
-        if (opp.includes(theLast(curr)))
+        if (isOperation(theLast(curr)))
             {curr = curr.slice(0,-1);}
         result = curr + next;
     }
@@ -29,7 +33,7 @@ export function nextStr(curr: string, next:string) : string{
 
 //dot
     else if (next === "."){ 
-        if (opp.includes(theLast(curr)) || curr === "") next = "0.";
+        if (isOperation(theLast(curr)) || curr === "") next = "0.";
         else if (theLastHasDot(curr)) return result = curr;
         result = curr + next;
     }
@@ -62,10 +66,11 @@ function equalManual(all:string):string{
     let buffer:string[] = all.split(/([+\-*/])/);
     if (buffer.at(-1) === "") buffer.splice(-2);
     let nump:number[] = buffer.filter((item ,i )=> i % 2 === 0).map(parseFloat);
-    let ops:string[] = buffer.filter((item ,i )=> i % 2 === 1);
+    let ops:Operation[] = buffer.filter(isOperation);
     for (let i = 0; i < ops.length; i++){
-        if (ops[i] === "*" || ops[i] === "/"){
-            nump[i] = operate(nump[i] ?? 0  ,ops[i] ?? "" ,nump[i+1] ?? 0);
+        const x = ops[i];
+        if (x === "*" || x === "/"){
+            nump[i] = operate(nump[i] ?? 0, x,nump[i+1] ?? 0);
             nump.splice(i+1,1);
             ops.splice(i,1);
             i--;
@@ -73,19 +78,22 @@ function equalManual(all:string):string{
     }
     let total:number = nump[0] ?? 0;
     for (let i = 0; i < ops.length; i++){
-        total = operate(total, ops[i] ?? "", nump [i+1] ?? 0);
+        const x = ops[i];
+        const y = nump[i+1];
+        if(x !== undefined && y !== undefined){
+        total = operate(total, x, y);
+        }
     }
     if (!Number.isFinite(total)) return "Error";
     total = parseFloat(total.toPrecision(12));
     return String(total);
 }
 
-function operate(num1:number , op:string, num2: number): number {
+function operate(num1:number , op:Operation, num2: number): number {
     switch(op){
         case "+": return num1 + num2;
         case "-": return num1 - num2;
         case "*": return num1 * num2;
         case "/": return num1 / num2;
-        default: return NaN;
-    }
+        }
 }
