@@ -10,18 +10,26 @@ const buttons_items:string[] = ["AC","backspace","/",
                                  "1","2","3","+",
                                  "0",".","="]
 
+
+
 export function App() {
   const [value, setValue] = useState<string | null>(null);
+
+  function handleClick(lable: string){
+    // if(parseInt(lable) === Number){
+    //   setValue = lable
+    // }
+  }
   return (
     <div className="app">
       <div className="calc">
         <div className="display">
-        <output className="dis ">
-          
+        <output className="dis">
+          {value}
         </output>
         </div>
         <div className="buttons">
-        {buttons_items.map((x)=> <button key={x} data-value={x}>{x}</button>)}
+        {buttons_items.map((x)=> <button key={x} data-value={x} onClick={() => handleClick(x)}>{x}</button>)}
         </div>
       </div>
     </div>

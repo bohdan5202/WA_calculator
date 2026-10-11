@@ -92,7 +92,7 @@ code {
   padding: 0.2rem;
   outline: 0;
 }
-.send-button {
+.buttons button {
   background: #fbf0df;
   color: #1a1a1a;
   border: 0;
@@ -102,7 +102,7 @@ code {
   transition: 0.1s;
   cursor: var(--bun-cursor);
 }
-.send-button:hover {
+.buttons button:hover {
   background: #f3d5a3;
   transform: translateY(-1px);
   cursor: pointer;
