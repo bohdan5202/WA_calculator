@@ -9,7 +9,9 @@
     "start": "NODE_ENV=production bun src/index.ts"
   },
   "dependencies": {
+    "lucide-react": "^1.55.0",
     "react": "^19",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19"
   },
   "devDependencies": {

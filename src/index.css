@@ -13,24 +13,6 @@ body {
   min-height: 100vh;
   position: relative;
 }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.05;
-  background-size: 256px;
-  transform: rotate(-12deg) scale(1.35);
-  pointer-events: none;
-}
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 256px 224px;
-  }
-}
 .app {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,26 +21,16 @@ body::before {
   position: relative;
   z-index: 1;
 }
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 0.3s;
-}
 .buttons {
   display: grid;
   grid-template-columns: repeat(4,1fr);
   gap: 0.5rem;
 }
-.buttons button[data-value="backspace"]{
+.buttons button[data-value="AC"]{
   grid-column: span 2;
+}
+.buttons button[data-value="AC"], .buttons button[data-value="backspace"]{
+  background: rgb(148, 147, 147);
 }
 
 .buttons button[data-value="0"]{
@@ -68,35 +40,10 @@ body::before {
 .buttons button:is([data-value="/"],button[data-value="+"],button[data-value="*"],button[data-value="-"]){
   background: orange;
 }
+.buttons button[data-value="="]{
+  background: rgb(170, 51, 51);
+}
 
-@keyframes spin {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-code {
-  background-color: #1a1a1a;
-  padding: 0.2em 0.4em;
-  border-radius: 0.3em;
-  font-family: monospace;
-}
-.url-input {
-  width: 100%;
-  flex: 1;
-  background: 0;
-  border: 0;
-  color: #fbf0df;
-  font: 1em monospace;
-  padding: 0.2rem;
-  outline: 0;
-}
 .buttons button {
   background: #fbf0df;
   color: #1a1a1a;
@@ -118,24 +65,6 @@ button:active{
 }
 button:focus-visible{
   outline: invert;
-}
-.response-area {
-  width: 100%;
-  min-height: 120px;
-  background: #1a1a1a;
-  border: 2px solid #fbf0df;
-  border-radius: 12px;
-  padding: 0.75rem;
-  color: #fbf0df;
-  font: monospace;
-  resize: vertical;
-  box-sizing: border-box;
-}
-.response-area:focus {
-  border-color: #f3d5a3;
-}
-.response-area::placeholder {
-  color: rgba(251, 240, 223, 0.4);
 }
 @media (prefers-reduced-motion) {
   *,

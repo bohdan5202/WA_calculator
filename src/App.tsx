@@ -1,8 +1,7 @@
 import { useState } from "react";
 import "./index.css";
+import { Delete } from "lucide-react";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
 import { nextStr } from "./calculate";
 
 const buttons_items:string[] = ["AC","backspace","/",
@@ -28,7 +27,8 @@ export function App() {
         </output>
         </div>
         <div className="buttons">
-        {buttons_items.map((x)=> <button key={x} data-value={x} onClick={() => handleClick(x)}>{x}</button>)}
+        {buttons_items.map((x)=> <button key={x} data-value={x} onClick={() => handleClick(x)}>{
+        x === "backspace" ? <Delete size={30}></Delete> : x}</button>)}
         </div>
       </div>
     </div>
