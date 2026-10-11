@@ -1,3 +1,5 @@
+import { CalcError, DivisionByZeroError, InvalidExpressionError, TooLongOrSmallResultError } from "./errors";
+
 const digits:string[] = ["0","1","2","3","4","5","6","7","8","9"]
 const operators = ["+","-","*","/"] as const;
 type Operation = (typeof operators)[number];
@@ -38,10 +40,18 @@ export function nextStr(curr: string, next:string) : string{
         result = curr + next;
     }
 // equals
-    else if (next === "=") {
-        // result = eval(curr); JS string calculate is bad for us XD
+    else if (next === "=" && curr !== "") {
 
-        result = equalManual(curr);
+        // result = eval(curr); JS string calculate is bad for us XD
+        try{
+            result = equalManual(curr);
+        } catch(e) {
+          if (e instanceof CalcError){
+            console.log(e.message);
+            return "Error"
+          }
+          throw e;
+        }
     }
 
     return result;
@@ -67,26 +77,40 @@ function equalManual(all:string):string{
     if (buffer.at(-1) === "") buffer.splice(-2);
     let nump:number[] = buffer.filter((item ,i )=> i % 2 === 0).map(parseFloat);
     let ops:Operation[] = buffer.filter(isOperation);
+    
+    if ((nump.length !== ops.length+1) || nump.some(n =>Number.isNaN(n))) 
+        throw new InvalidExpressionError("Operators and numbers do not match");
+
     for (let i = 0; i < ops.length; i++){
         const x = ops[i];
+        const y = nump[i];
+        const z = nump[i+1];
         if (x === "*" || x === "/"){
-            nump[i] = operate(nump[i] ?? 0, x,nump[i+1] ?? 0);
+            if (y === undefined || z === undefined){
+                throw new InvalidExpressionError("Operators and numbers do not match")
+            }
+            nump[i] = operate(y, x, z);
             nump.splice(i+1,1);
             ops.splice(i,1);
             i--;
         }
     }
-    let total:number = nump[0] ?? 0;
+    const first = nump[0];
+    if (first === undefined) throw new InvalidExpressionError("Operators and numbers do not match");
+    let total:number = first;
     for (let i = 0; i < ops.length; i++){
         const x = ops[i];
         const y = nump[i+1];
-        if(x !== undefined && y !== undefined){
-        total = operate(total, x, y);
+        if(x === undefined || y === undefined){
+            throw new InvalidExpressionError("Operators and numbers do not match");
         }
+        total = operate(total, x, y);
+        
     }
-    if (!Number.isFinite(total)) return "Error";
-    total = parseFloat(total.toPrecision(12));
-    return String(total);
+    if (!Number.isFinite(total)) throw new TooLongOrSmallResultError("Result too large");
+    const formatted = String(parseFloat(total.toPrecision(12)));
+    if (formatted.includes("e")) throw new TooLongOrSmallResultError("Result too large") 
+    return formatted;
 }
 
 function operate(num1:number , op:Operation, num2: number): number {
@@ -94,6 +118,8 @@ function operate(num1:number , op:Operation, num2: number): number {
         case "+": return num1 + num2;
         case "-": return num1 - num2;
         case "*": return num1 * num2;
-        case "/": return num1 / num2;
-        }
+        case "/":
+            if (num2 === 0) throw new DivisionByZeroError("Cannot divide by zero");
+            return num1 / num2;
+    }
 }
